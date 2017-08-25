@@ -52,9 +52,8 @@ public class ServerThread extends Thread {
 					int i =0;
 					serverOutput.println("Enter your username: ");
 					String tempName;
-					try {System.out.println("Usao unos");
+					try {
 						 tempName = clientInput.readLine();
-						 System.out.println("Uneto ime: " + tempName);
 					} catch (Exception e) {
 						System.out.println("Unknown client connection timed out."+ e.getMessage());
 						date = new Date();
@@ -99,7 +98,7 @@ public class ServerThread extends Thread {
 				i++;
 				}
 			}	
-			serverOutput.println("Online clinets: " + list);System.out.println("Lista: " + list);
+			serverOutput.println("Online clinets: " + list);
 			//  Log in __________
 			
 			
@@ -133,9 +132,11 @@ public class ServerThread extends Thread {
 							String response = clients.get(j).clientInput.readLine();
 							
 							if(response.equals("yes")){
-							serverOutput.println("yes/"
+							serverOutput.println("conn: yes/"
 													+clients.get(j).communication.getInetAddress().toString()+ "/"
 														+clients.get(j).communication.getPort());
+//							clients.get(j).serverOutput.println(communication.getInetAddress().toString() + "/"
+//													+ communication.getPort());
 							clients.get(j).destroy();
 							clients.remove(j);
 							clients.remove(this);

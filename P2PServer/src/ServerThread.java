@@ -52,11 +52,11 @@ public class ServerThread extends Thread {
 					int i =0;
 					serverOutput.println("Enter your username: ");
 					String tempName;
-					try {
+					try {System.out.println("Usao unos");
 						 tempName = clientInput.readLine();
-						 
+						 System.out.println("Uneto ime: " + tempName);
 					} catch (Exception e) {
-						System.out.println("Unknown client connection timed out.");
+						System.out.println("Unknown client connection timed out."+ e.getMessage());
 						date = new Date();
 						printer = new PrintWriter(
 								new BufferedWriter(
@@ -90,34 +90,35 @@ public class ServerThread extends Thread {
 			
 			serverOutput.println("Welcome " + name);
 			int i = 0;
-			String list = null;
+			String list = "";
 			while (i<clients.size()) {
 				if(clients.get(i) != null && clients.get(i)!= this){
-					list = clients.get(i).name + "; ";
+					list += clients.get(i).name + "; ";
 					i++;
 				}else{
 				i++;
 				}
 			}	
-			serverOutput.println("Online clinets: " + list);
+			serverOutput.println("Online clinets: " + list);System.out.println("Lista: " + list);
 			//  Log in __________
 			
 			
 		while(true){
 			
 			String request = clientInput.readLine();
+			i = 0;
 			if(request.contains("getOnline")){
-			   list = null;
+			   list = "";
 				while (i<clients.size()) {
 					if(clients.get(i) != null && clients.get(i)!= this){
 						String temp = clients.get(i).name + "; ";
-						list.concat(temp);
+						list = list.concat(temp);
 						i++;
 					}else{
 					i++;
 					}
-				}	
-				serverOutput.println("Online clinets: " + list);
+				}
+				serverOutput.println("Online clients: " + list);
 			
 			}else if(request.startsWith("conn")){
 				String user = request.substring(6);

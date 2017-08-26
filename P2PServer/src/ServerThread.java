@@ -19,6 +19,7 @@ public class ServerThread extends Thread {
 	String name = null;
 	Date date;
 	public String userCall = null;
+	public int userPort = -1;
 	
 	Socket communication = null;
 	LinkedList<ServerThread> clients;
@@ -87,7 +88,8 @@ public class ServerThread extends Thread {
 				}
 			
 			serverOutput.println("Welcome " + name);
-			int i = 0;
+			userPort = Integer.parseInt(clientInput.readLine().trim());
+			int i = 0;						
 			String list = "";
 			while (i<clients.size()) {
 				if(clients.get(i) != null && clients.get(i)!= this){
@@ -128,6 +130,7 @@ public class ServerThread extends Thread {
 						if(clients.get(j).name.equals(userCall)){
 							found = true;
 							clients.get(j).serverOutput.println(name + " has requested connection with you. Accept?");
+							j++;
 							
 //							String response = clients.get(j).clientInput.readLine();
 //							
@@ -158,26 +161,36 @@ public class ServerThread extends Thread {
 					
 			}else if(request.contains("yes")){
 				int ii =0;
+				boolean b = false;
+				//MOJ DEO TESTA
+				for (ServerThread c : clients) {
+					System.out.println("ISPIS: " + c.userCall);
+				}
 				while(ii<clients.size()){
-					if(clients.get(ii).userCall==this.name){
+					if(clients.get(ii).userCall.equals(this.name)){				
+						b = true;
 						
 						serverOutput.println(clients.get(ii).communication.getInetAddress().toString()+ "/"
-									+clients.get(ii).communication.getPort());
+									+clients.get(ii).userPort);
 						
 						clients.get(ii).serverOutput.println("conn: yes/"
 								+communication.getInetAddress().toString()+ "/"
-									+communication.getPort());
+									+userPort);
 						
-						clients.get(ii).destroy();
+						clients.get(ii).destroy();		//Exception in thread "Thread-1" java.lang.NoSuchMethodError		
 						clients.remove(ii);
 						clients.remove(this);
 						return;
 						
-					}else{
-						serverOutput.println("Error...");
 					}
+					ii++;
+//					else{
+//						serverOutput.println("Error...");
+//					}
 				}
-				
+				if (!b) {
+					serverOutput.println("Error...");
+				}
 				
 			}else if(request.contains("no")){
 				int ii =0;

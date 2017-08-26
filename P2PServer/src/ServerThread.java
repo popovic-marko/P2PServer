@@ -18,6 +18,7 @@ public class ServerThread extends Thread {
 	
 	String name = null;
 	Date date;
+	public String userCall = null;
 	
 	Socket communication = null;
 	LinkedList<ServerThread> clients;
@@ -27,7 +28,7 @@ public class ServerThread extends Thread {
 		this.clients = clients;
 	}
 	
-	@SuppressWarnings({ "unused", "null", "deprecation" })
+	@SuppressWarnings({ "unused" })
 	public void run(){
 		
 		String newLine = null;
@@ -85,8 +86,6 @@ public class ServerThread extends Thread {
 					}
 				}
 			
-			
-			
 			serverOutput.println("Welcome " + name);
 			int i = 0;
 			String list = "";
@@ -103,9 +102,10 @@ public class ServerThread extends Thread {
 			
 			
 		while(true){
-			
+
 			String request = clientInput.readLine();
 			i = 0;
+			
 			if(request.contains("getOnline")){
 			   list = "";
 				while (i<clients.size()) {
@@ -120,38 +120,71 @@ public class ServerThread extends Thread {
 				serverOutput.println("Online clients: " + list);
 			
 			}else if(request.startsWith("conn")){
-				String user = request.substring(6);
-				boolean found = false;	
+				 userCall = request.substring(6);
+				 boolean found = false;	
 					int j = 0;
 					while(j < clients.size()){
 						
-						if(clients.get(j).name.equals(user)){
+						if(clients.get(j).name.equals(userCall)){
 							found = true;
 							clients.get(j).serverOutput.println(name + " has requested connection with you. Accept?");
 							
-							String response = clients.get(j).clientInput.readLine();
-							
-							if(response.equals("yes")){
-							serverOutput.println("conn: yes/"
-													+clients.get(j).communication.getInetAddress().toString()+ "/"
-														+clients.get(j).communication.getPort());
-//							clients.get(j).serverOutput.println(communication.getInetAddress().toString() + "/"
-//													+ communication.getPort());
-							clients.get(j).destroy();
-							clients.remove(j);
-							clients.remove(this);
-							return;
-							}else{
-								serverOutput.println("conn: no");
-							}
+//							String response = clients.get(j).clientInput.readLine();
+//							
+//							if(response.equals("yes")){
+//							serverOutput.println("conn: yes/"
+//													+clients.get(j).communication.getInetAddress().toString()+ "/"
+//														+clients.get(j).communication.getPort());
+////							clients.get(j).serverOutput.println(communication.getInetAddress().toString() + "/"
+////													+ communication.getPort());
+//							clients.get(j).destroy();
+//							clients.remove(j);
+//							clients.remove(this);
+//							return;
+//							}else{
+//								serverOutput.println("conn: no");
+//							}
 						}else{
 							j++;
 						}
 						
-					}if(found == false){
+					}
+					if(found == false){
 						serverOutput.println("User not found");
 					}
 					
+//  izmena_________  mora da radi :)
+					
+					
+			}else if(request.contains("yes")){
+				int ii =0;
+				while(ii<clients.size()){
+					if(clients.get(ii).userCall==this.name){
+						
+						serverOutput.println(clients.get(ii).communication.getInetAddress().toString()+ "/"
+									+clients.get(ii).communication.getPort());
+						
+						clients.get(ii).serverOutput.println("conn: yes/"
+								+communication.getInetAddress().toString()+ "/"
+									+communication.getPort());
+					}else{
+						serverOutput.println("Error...");
+					}
+				}
+				
+				
+			}else if(request.contains("no")){
+				int ii =0;
+				while(ii<clients.size()){
+					if(clients.get(ii).userCall==this.name){
+						clients.get(ii).serverOutput.println("conn: no");
+					}else{
+						serverOutput.println("Error...");
+					}
+				}
+				
+//izmena_____	
+				
 				
 			}else {
 				serverOutput.println("Goodbye!");

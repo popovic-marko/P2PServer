@@ -28,7 +28,7 @@ public class ServerThread extends Thread {
 		this.clients = clients;
 	}
 	
-	@SuppressWarnings({ "unused" })
+	@SuppressWarnings({ "unused", "deprecation" })
 	public void run(){
 		
 		String newLine = null;
@@ -167,6 +167,12 @@ public class ServerThread extends Thread {
 						clients.get(ii).serverOutput.println("conn: yes/"
 								+communication.getInetAddress().toString()+ "/"
 									+communication.getPort());
+						
+						clients.get(ii).destroy();
+						clients.remove(ii);
+						clients.remove(this);
+						return;
+						
 					}else{
 						serverOutput.println("Error...");
 					}

@@ -11,22 +11,22 @@ public class Server {
 
 		int port = 2222;
 		Socket clientSocket = null;
-		int i =0;
-		
+		int i = 0;
+
 		try {
 			@SuppressWarnings("resource")
 			ServerSocket serverSocket = new ServerSocket(port);
-			
-			while(true){
+
+			while (true) {
+				System.out.println("Online clients: " + clients.size());
 				clientSocket = serverSocket.accept();
 				clients.addLast(new ServerThread(clientSocket, clients));
 				clients.getLast().start();
-				System.out.println("new client #" +(++i));
-				
+				System.out.println("new client #" + (++i));
+
 			}
 
 		} catch (IOException e) {
-			//e.printStackTrace();
 			System.out.println("Socket error...");
 		}
 	}
